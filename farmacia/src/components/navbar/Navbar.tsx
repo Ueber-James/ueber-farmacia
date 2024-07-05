@@ -9,11 +9,13 @@ const NavBar = () => {
         <h1 className="text-white text-2xl">Farmácia</h1>
 
         <div className="flex gap-4">
-          <div className="hover:underline">Categorias</div>
+
+          <Link to="/categorias" className="hover:underline">
+            Categorias
+          </Link>
           <Link to="/cadastroCategoria" className="hover:underline">
             Cadastrar Categoria
           </Link>
-          
         </div>
       </div>
     </nav>

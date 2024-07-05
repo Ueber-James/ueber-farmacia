@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Categoria from "../../models/categorias";
@@ -10,6 +10,20 @@ function FormularioTema() {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
+
+  async function buscarPorId(id: string) {
+    await buscar(`/categorias/${id}`, setCategoria, {
+      headers: {
+
+      },
+    });
+  }
+
+  useEffect(() => {
+    if (id !== undefined) {
+      buscarPorId(id);
+    }
+  }, [id]);
 
   function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
     setCategoria({
@@ -33,7 +47,7 @@ function FormularioTema() {
         retornar();
       } catch (error: any) {
         if (error.toString().includes("403")) {
-          "deu ruim"
+          ("deu ruim");
         } else {
           alert("Erro ao atualizar o Categoria");
         }
@@ -47,7 +61,7 @@ function FormularioTema() {
         alert("Categoria cadastrado com sucesso");
       } catch (error: any) {
         if (error.toString().includes("403")) {
-          "deu ruim"
+          ("deu ruim");
         } else {
           alert("Erro ao cadastrado o Categoria");
         }
@@ -64,22 +78,11 @@ function FormularioTema() {
   return (
     <div className="container flex flex-col items-center justify-center mx-auto w-full h-screen">
       <h1 className="text-4xl text-center my-8">
-        {id === undefined
-          ? "Cadastre um novo Categoria"
-          : "Editar categoriauebe"}
+        {id === undefined ? "Cadastre um novo Categoria" : "Editar categoria"}
       </h1>
 
       <form className="w-1/2 flex flex-col gap-4" onSubmit={gerarNovaCategoria}>
         <div className="flex flex-col gap-2">
-          <label htmlFor="descricao">Descrição</label>
-          <input
-            type="text"
-            placeholder="Descrição"
-            name="descricao"
-            className="border-2 border-slate-700 rounded p-2"
-            value={categoria.descricao}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
-          />
           <label htmlFor="descricao">Nome</label>
           <input
             type="text"
@@ -90,6 +93,16 @@ function FormularioTema() {
             onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
           />
         </div>
+
+        <label htmlFor="descricao">Descrição</label>
+        <input
+          type="text"
+          placeholder="Descrição"
+          name="descricao"
+          className="border-2 border-slate-700 rounded p-2"
+          value={categoria.descricao}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+        />
         <button
           className="rounded text-slate-100 bg-indigo-400 hover:bg-indigo-800 w-1/2 py-2 mx-auto block"
           type="submit"
